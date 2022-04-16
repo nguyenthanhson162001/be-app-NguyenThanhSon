@@ -4,6 +4,12 @@ import { validationResult } from 'express-validator'
 export const insertUser = async (user: IUser) => {
     return await User.create(user)
 }
+export const isUserContain = async (user: IUser): Promise<boolean> => {
+    var userOld = await User.findOne({ eventId: user.eventId, email: user.email })
+    if (userOld)
+        return true;
+    return false;
+}
 export const initUser = (req: any): Promise<IUser | string> => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -23,5 +29,7 @@ export const initUser = (req: any): Promise<IUser | string> => {
         user.hobbies = hobbies
     }
     return Promise.resolve(user);
-
+}
+export const deleteUserById = async (id: string) => {
+    return await User.deleteOne({ _id: id })
 }

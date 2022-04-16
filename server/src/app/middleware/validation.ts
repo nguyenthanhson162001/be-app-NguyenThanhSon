@@ -18,5 +18,9 @@ export const eventBValidation = [
 
 export const loginValidation = [
     body('email').isEmail().isLength({ max: 50 }).withMessage('Length Email must be at Most 50'),
-    body('password').isLength({ max: 50, min: 8 }).withMessage('Length password must be at least 8 and Most 50'),
+    body('password').isLength({ max: 50, min: 8 })
 ];
+
+export const deleteValidation = [
+    body('userId').isMongoId().withMessage('userId must be type mongoID'),
+]

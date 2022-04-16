@@ -2,9 +2,9 @@ import express, { Request, Response, NextFunction } from 'express';
 import 'dotenv/config'
 import { connectDB } from './config/database/mongoDB'
 import { Role, Account, User, Event } from './app/model'
-import { eventAValidation, eventBValidation, loginValidation } from './app/middleware/validation'
+import { eventAValidation, eventBValidation, loginValidation, deleteValidation } from './app/middleware/validation'
 import { sendError, sendResult } from './util/res.util'
-import { registerFormA, registerFormB } from './app/controller/userController';
+import { deleteUser, registerFormA, registerFormB } from './app/controller/userController';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,6 +19,9 @@ app.post('/event-a/register', eventAValidation, registerFormA);
 
 app.post('/event-b/register', eventBValidation, registerFormB);
 
+app.get('/user/list-user', registerFormB);
+
+app.delete('/user/delete', deleteValidation, deleteUser);
 
 
 app.listen(port, () => {
