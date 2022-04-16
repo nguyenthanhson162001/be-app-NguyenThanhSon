@@ -1,14 +1,17 @@
 import express from 'express';
 import 'dotenv/config'
 import { connectDB } from './config/database/mongoDB'
+import { Role, Account, User, Event } from './app/model'
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 connectDB();
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+app.get('/', async (req, res) => {
+
+    res.json({ Role: await Role.find({}) });
+
 });
 
 console.log(process.env.PORT)
