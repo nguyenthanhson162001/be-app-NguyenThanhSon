@@ -22,18 +22,15 @@ export const listUserRegisterForm = (req: any, res: Response) => {
 // [DELETE]/user/delete?userId=
 export const deleteUser = (req: Request, res: Response) => {
     var userId = req.body.userId;
-    if (!userId) {
-        return sendError(400, 'Missing param userId', res);
-    }
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return sendError(400, errors.array(), res);
     }
     deleteUserById(userId)
         .then((e: any) => {
-            res.send(e)
+            return sendResult({ deletedCount: e.deletedCount }, res);
         }).catch((error: any) => {
-            res.send(error)
+            return sendError(400, error, res);
         })
 }
 
