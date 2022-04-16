@@ -1,7 +1,11 @@
 
-import { Schema, model, connect, Types } from 'mongoose';
+import { Schema, model, connect, Types, plugin } from 'mongoose';
+
+
+
 export interface Event {
     eventName?: string;
+    slug: string
 }
 
 const schema = new Schema<Event>({
