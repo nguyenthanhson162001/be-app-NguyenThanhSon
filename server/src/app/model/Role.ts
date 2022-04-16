@@ -1,11 +1,10 @@
 import { Schema, model, connect, Types } from 'mongoose';
-export interface Role {
-
+export interface IRole {
     roleName?: string;
 }
 
-const schema = new Schema<Role>({
+const schema = new Schema<IRole>({
     roleName: { type: String, required: true },
 });
 
-export default model<Role>('Role', schema);
+export default model<IRole>('Role', schema);
