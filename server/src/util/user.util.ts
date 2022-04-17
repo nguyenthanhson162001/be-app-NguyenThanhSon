@@ -30,3 +30,6 @@ export const isUserContain = async (user: IUser): Promise<boolean> => {
 export const deleteUserById = async (id: string) => {
     return await User.deleteOne({ _id: id })
 }
+export const getListUserByEventAndOption = async (options: any) => {
+    return await User.paginate(options);
+}

@@ -1,4 +1,4 @@
-import { Schema, model, connect, Types, Document } from 'mongoose';
+import { Schema, model, Types, Document } from 'mongoose';
 import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 export type IUser = Document & {
   _id: string;
