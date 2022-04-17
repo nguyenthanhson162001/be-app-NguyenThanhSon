@@ -2,17 +2,23 @@ import e, { Response, Request } from 'express'
 import { validationResult } from 'express-validator'
 import { sendError, sendResult } from '../../util/res.util'
 import { getEventBySlug } from '../../util/event.util'
-import { initUser, insertUserOnEvent, isUserContain, deleteUserById } from '..//..//util/user.util'
+import { insertUserOnEvent, isUserContain, deleteUserById } from '..//..//util/user.util'
 import { IEvent, IUser, User } from '../model'
 import { eventAValidation, eventBValidation } from '..//..//util/valiadtion'
+import { getOptionInRequest } from '..//..//util/pagination.util'
 import 'dotenv/config'
 
 const eventAId = process.env.EVENT_A_ID as string
 const eventBId = process.env.EVENT_B_ID as string
 
 // [GET]/user/list-user
-export const listUserByEvent = (req: any, res: Response) => {
-
+export const listUserByEvent = async (req: Request, res: Response) => {
+    const eventId = req.query.eventId
+    if (!eventId || eventId?.length != 24)
+        return sendError(400, 'Require evenId and correct format', res);
+    var options = getOptionInRequest(req)
+    var results = await User.paginate(options) as any
+    sendResult(results, res);
 }
 
 // [GET]/register-event/:slug
@@ -59,20 +65,4 @@ export const deleteUser = (req: Request, res: Response) => {
         }).catch((error: any) => {
             return sendError(400, error, res);
         })
-}
-
-const registerForm = (req: any, res: Response, eventId: string) => {
-    // req.eventId = eventId;
-    // initUser(req).then((user: any) => {
-    //     return Promise.all([isUserContain, user])
-    // }).then(([isContain, user]) => {
-    //     // check email contain in event
-    //     if (!isContain)
-    //         return insertUser(user as IUser)
-    //     throw ("Email already in use");
-    // }).then((user) => {
-    //     sendResult(user, res)
-    // }).catch(e => {
-    //     sendError(400, e, res);
-    // })
 }

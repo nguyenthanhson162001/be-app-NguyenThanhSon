@@ -5,7 +5,7 @@ export default (app: any) => {
 
     app.post('/register-event/:slug', registerEvent);
 
-    app.get('/user/list-user', checkIdObjectMongoDB('eventId'), listUserByEvent);
+    app.get('/user/list-user', listUserByEvent);
 
     app.delete('/user/delete', checkIdObjectMongoDB('userId'), deleteUser);
 }

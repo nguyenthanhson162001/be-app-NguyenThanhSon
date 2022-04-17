@@ -1,6 +1,4 @@
-import { Request } from 'express'
 import { IUser, User } from '..//app/model'
-import { validationResult } from 'express-validator'
 export const insertUserOnEvent = async (user: IUser, eventId: string) => {
     var userCheck = await getUserByEmail(user.email as string);
     // Create new User
@@ -8,7 +6,6 @@ export const insertUserOnEvent = async (user: IUser, eventId: string) => {
         user.eventId = [eventId]
         return await User.create(user)
     }
-
     // Check user registed event
     var listEvent = userCheck.eventId as string[]
     if (listEvent.includes(eventId)) {
@@ -17,8 +14,7 @@ export const insertUserOnEvent = async (user: IUser, eventId: string) => {
     }
     listEvent.push(eventId)
     user.eventId = listEvent;
-
-    // add event in user old
+    // add event in user old7
     return await User.updateOne({ email: user.email }, { ...user });
 }
 export const getUserByEmail = async (email: string): Promise<IUser> => {
@@ -30,26 +26,7 @@ export const isUserContain = async (user: IUser): Promise<boolean> => {
         return true;
     return false;
 }
-export const initUser = (req: any): Promise<IUser | string> => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return Promise.reject(errors.array());
-    }
-    var { worlkLocation, lastName, firstName, email, hobbies } = req.body
-    var user = {
-        lastName,
-        firstName,
-        email,
-        eventId: req.eventId
-    } as IUser
-    // if worlkLocation == null => make sure hobbies not null, because have validation
-    if (worlkLocation) {
-        user.workLocation = worlkLocation
-    } else {
-        user.hobbies = hobbies
-    }
-    return Promise.resolve(user);
-}
+
 export const deleteUserById = async (id: string) => {
     return await User.deleteOne({ _id: id })
 }
