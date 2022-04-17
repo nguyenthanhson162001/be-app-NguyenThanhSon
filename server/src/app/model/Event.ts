@@ -4,6 +4,7 @@ import slug from 'mongoose-slug-hero'
 
 
 export interface IEvent {
+    _id: string;
     eventName?: string;
     slug: string
 }

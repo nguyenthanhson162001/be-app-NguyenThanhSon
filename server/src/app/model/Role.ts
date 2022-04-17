@@ -1,5 +1,6 @@
 import { Schema, model, connect, Types } from 'mongoose';
 export interface IRole {
+    _id: string;
     roleName?: string;
 }
 

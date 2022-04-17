@@ -1,28 +1,18 @@
 import express, { Request, Response, NextFunction } from 'express';
 import 'dotenv/config'
 import { connectDB } from './config/database/mongoDB'
-import { Role, Account, User, Event } from './app/model'
-import { eventAValidation, eventBValidation, loginValidation, deleteValidation } from './app/middleware/validation'
-import { sendError, sendResult } from './util/res.util'
-import { deleteUser, registerFormA, registerFormB } from './app/controller/userController';
-
+import Router from './routes';
 const app = express();
 const port = process.env.PORT || 3000;
 
+// connect DB mongoDB
 connectDB();
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-
-app.post('/event-a/register', eventAValidation, registerFormA);
-
-app.post('/event-b/register', eventBValidation, registerFormB);
-
-app.get('/user/list-user', registerFormB);
-
-app.delete('/user/delete', deleteValidation, deleteUser);
-
+// Handling request 
+Router(app);
 
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);

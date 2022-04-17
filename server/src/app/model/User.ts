@@ -1,12 +1,13 @@
-import { Schema, model, connect, Types } from 'mongoose';
-export interface IUser {
-
+import { Schema, model, connect, Types, Document } from 'mongoose';
+import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
+export type IUser = Document & {
+  _id: string;
   lastName?: string;
   firstName?: string;
   email?: string;
   hobbies: string;
   workLocation: string;
-  eventId?: string
+  eventId?: string[]
 }
 
 // 2. Create a Schema corresponding to the document interface.
@@ -17,6 +18,9 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true },
   hobbies: { type: String, required: false },
   workLocation: { type: String, required: false },
-  eventId: { type: Types.ObjectId, ref: 'Event' }
+  eventId: [{ type: Types.ObjectId, ref: 'Event' }]
 }, { timestamps: true });
-export default model<IUser>('User', userSchema);
+
+userSchema.plugin(mongoosePagination);
+
+export default model<IUser, Pagination<IUser>>('User', userSchema) as Pagination<IUser>;

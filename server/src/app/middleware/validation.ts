@@ -22,5 +22,11 @@ export const loginValidation = [
 ];
 
 export const deleteValidation = [
-    body('userId').isMongoId().withMessage('userId must be type mongoID'),
+    body('userId').isMongoId().withMessage(`userId must be type mongoID`),
 ]
+
+export const checkIdObjectMongoDB = (attName: string) => {
+    return [
+        body(attName).isMongoId().withMessage(`${attName} must be type mongoID`),
+    ]
+}
