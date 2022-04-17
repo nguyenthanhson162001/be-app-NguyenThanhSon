@@ -29,3 +29,11 @@ export const eventBValidation = Joi.object({
         .max(30)
         .required(),
 })
+export const loginValidation = Joi.object({
+    email: Joi.string().email()
+        .max(50)
+        .required(),
+    password: Joi.string()
+        .max(60)
+        .required(),
+})

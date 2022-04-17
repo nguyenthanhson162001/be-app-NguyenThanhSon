@@ -1,12 +1,14 @@
-import e, { Response, Request } from 'express'
-import { validationResult } from 'express-validator'
+import { Response, Request } from 'express'
+import bcrypt from 'bcrypt'
+import 'dotenv/config'
+
 import { sendError, sendResult } from '../../util/res.util'
 import { getEventBySlug } from '../../util/event.util'
 import { insertUserOnEvent, getListUserByEventAndOption, deleteUserById } from '..//..//util/user.util'
-import { IEvent, IUser, User } from '../model'
-import { eventAValidation, eventBValidation } from '..//..//util/valiadtion'
+import { Account, IEvent, IUser, User } from '../model'
+import { eventAValidation, eventBValidation, loginValidation } from '..//..//util/valiadtion'
 import { getOptionInRequest } from '..//..//util/pagination.util'
-import 'dotenv/config'
+
 
 const eventAId = process.env.EVENT_A_ID as string
 const eventBId = process.env.EVENT_B_ID as string
@@ -70,12 +72,3 @@ export const deleteUser = (req: Request, res: Response) => {
         })
 }
 
-// [DELETE]/user/delete?userId=
-export const getToken = (req: Request, res: Response) => {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return sendError(400, errors.array(), res);
-    }
-
-}
