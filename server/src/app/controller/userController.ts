@@ -67,3 +67,22 @@ export const deleteUser = (req: Request, res: Response) => {
             return sendError(400, error, res);
         })
 }
+
+
+// [DELETE]/user/delete?userId=
+export const getToken = (req: Request, res: Response) => {
+    var userId = req.body.userId;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return sendError(400, errors.array(), res);
+    }
+    deleteUserById(userId)
+        .then((e: any) => {
+            var count = e.deletedCount
+            if (count == 0)
+                throw ('UserId not contain');
+            return sendResult({ deletedCount: count }, res);
+        }).catch((error: any) => {
+            return sendError(400, error, res);
+        })
+}
