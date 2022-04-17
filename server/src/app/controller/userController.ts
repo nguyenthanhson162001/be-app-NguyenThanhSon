@@ -16,7 +16,8 @@ export const listUserByEvent = async (req: Request, res: Response) => {
     const eventId = req.query.eventId
     if (!eventId || eventId?.length != 24)
         return sendError(400, 'Require evenId and correct format', res);
-    var options = getOptionInRequest(req)
+    var options = getOptionInRequest(req) as any
+    options.query = { eventId }
     var results = await User.paginate(options) as any
     sendResult(results, res);
 }
