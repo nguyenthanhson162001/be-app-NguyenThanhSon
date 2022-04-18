@@ -1,7 +1,6 @@
 import { sendError, sendResult } from "../../util/res.util";
 import { loginValidation } from "../../util/valiadtion";
 import { Request, Response } from 'express'
-import { getUserByEmail } from "../../util/user.util";
 import jwt from 'jsonwebtoken'
 import { getAccountByEmailPassword } from "../../util/account.util";
 
@@ -16,7 +15,7 @@ export const getToken = async (req: Request, res: Response) => {
     if (!account)
         return sendError(400, 'Email or password not correct', res);
 
-    const token = jwt.sign({ _id: account._id }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({ _id: account._id, role: account.role }, process.env.JWT_SECRET as string, {
         expiresIn: "4h",
     });
     sendResult({ token }, res)

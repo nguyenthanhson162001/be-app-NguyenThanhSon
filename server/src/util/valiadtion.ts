@@ -2,11 +2,9 @@ import Joi from 'joi'
 // same check many event
 const eventvalidationBasic = {
     lastName: Joi.string()
-        .alphanum()
         .max(30)
         .required(),
     firstName: Joi.string()
-        .alphanum()
         .max(30)
         .required(),
     email: Joi.string().email()
@@ -16,17 +14,14 @@ const eventvalidationBasic = {
 
 export const eventAValidation = Joi.object({
     ...eventvalidationBasic,
-    hobbies: Joi.string()
-        .alphanum()
-        .max(200)
-        .required(),
+    workLocation: Joi.string()
+        .max(30)
+        .required()
 })
-
 export const eventBValidation = Joi.object({
     ...eventvalidationBasic,
-    workLocation: Joi.string()
-        .alphanum()
-        .max(30)
+    hobbies: Joi.string()
+        .max(200)
         .required(),
 })
 export const loginValidation = Joi.object({
@@ -35,5 +30,22 @@ export const loginValidation = Joi.object({
         .required(),
     password: Joi.string()
         .max(60)
+        .required(),
+})
+export const emailValidation = Joi.object({
+    email: Joi.string().email()
+        .max(50)
+        .required(),
+})
+
+export const updateUserValidation = Joi.object({
+    ...eventvalidationBasic,
+    hobbies: Joi.string()
+        .max(200),
+
+    workLocation: Joi.string()
+        .max(30),
+
+    _id: Joi.string()
         .required(),
 })

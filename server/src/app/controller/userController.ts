@@ -4,9 +4,9 @@ import 'dotenv/config'
 
 import { sendError, sendResult } from '../../util/res.util'
 import { getEventBySlug } from '../../util/event.util'
-import { insertUserOnEvent, getListUserByEventAndOption, deleteUserById } from '..//..//util/user.util'
+import { insertUserOnEvent, getListUserByEventAndOption, deleteUserById, getUserByEmailPopulated, getUserByEmail } from '..//..//util/user.util'
 import { Account, IEvent, IUser, User } from '../model'
-import { eventAValidation, eventBValidation, loginValidation } from '..//..//util/valiadtion'
+import { eventAValidation, eventBValidation, emailValidation, updateUserValidation } from '..//..//util/valiadtion'
 import { getOptionInRequest } from '..//..//util/pagination.util'
 
 
@@ -17,7 +17,7 @@ const eventBId = process.env.EVENT_B_ID as string
 export const listUserByEvent = async (req: Request, res: Response) => {
     const eventId = req.query.eventId
     if (!eventId || eventId?.length != 24)
-        return sendError(400, 'Require evenId and correct format', res);
+        return sendError(400, { message: 'Require evenId and correct format' }, res);
     var options = getOptionInRequest(req) as any
     options.query = { eventId }
     getListUserByEventAndOption(options)
@@ -33,7 +33,7 @@ export const registerEvent = async (req: Request, res: Response) => {
     var eventSlug = req.params.slug as string
     var event = await getEventBySlug(eventSlug) as IEvent | null
     if (!event)
-        return sendError(400, 'Event not found', res);
+        return sendError(400, { message: 'Event not found' }, res);
     switch (event._id.toString()) {
         case eventAId:
             var { error, value } = eventAValidation.validate(req.body);
@@ -42,7 +42,7 @@ export const registerEvent = async (req: Request, res: Response) => {
             var { error, value } = eventBValidation.validate(req.body);
             break;
         default:
-            return sendError(400, 'Event Not set up yet', res);
+            return sendError(400, { message: 'Event Not set up yet' }, res);
     }
     if (error) {
         return sendError(400, error?.details[0], res);
@@ -60,7 +60,7 @@ export const registerEvent = async (req: Request, res: Response) => {
 export const deleteUser = (req: Request, res: Response) => {
     var userId = req.body.userId;
     if (!userId || userId?.length != 24)
-        return sendError(400, 'Require userId and correct format', res);
+        return sendError(400, { message: 'Require userId and correct format' }, res);
     deleteUserById(userId)
         .then((e: any) => {
             var count = e.deletedCount
@@ -71,4 +71,28 @@ export const deleteUser = (req: Request, res: Response) => {
             return sendError(400, error, res);
         })
 }
+
+
+
+// [GET]/account/get-list-event-register?email=
+export const getListEventRegisterByEmail = async (req: Request, res: Response) => {
+    var { error, value } = emailValidation.validate(req.query);
+    if (error) {
+        return sendError(400, error?.details[0], res);
+    }
+    var user = await getUserByEmailPopulated(value.email)
+    console.log(user)
+    res.json(user)
+}
+
+// [PUT]/account/update-user
+export const updateUser = async (req: Request, res: Response) => {
+    var { error, value } = updateUserValidation.validate(req.query);
+    if (error) {
+        return sendError(400, error?.details[0], res);
+    }
+    var userOld = await getUserByEmail(value.email);
+
+}
+
 

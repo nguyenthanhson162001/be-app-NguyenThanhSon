@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors'
 import 'dotenv/config'
 import { connectDB } from './config/database/mongoDB'
 import Router from './routes';
@@ -10,6 +11,8 @@ connectDB();
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.use(cors())
 
 // Handling request 
 Router(app);

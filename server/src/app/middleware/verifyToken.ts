@@ -1,18 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { sendError } from "../../util/res.util";
+import jwt from 'jsonwebtoken'
 
-const jwt = require('jsonwebtoken');
-
-export default function (req: any, res: Response, next: NextFunction) {
+export const checkToken = (req: any, res: Response, next: NextFunction) => {
     const token = req.headers["auth-token"]
     if (!token)
-        return res.status(401).send('Login require')
+        return sendError(400, 'missing auth-token in header', res);
     try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET)
-        req.userID = verified._id
-        next()
+        const verified = jwt.verify(token, process.env.JWT_SECRET as string) as any
+        req.userID = verified._id;
+        req.role = verified.role;
+        next();
     } catch (error) {
-        sendError(400, 'Invalid token', res);
+        return sendError(400, 'Invalid token', res);
     }
+
 }
 
