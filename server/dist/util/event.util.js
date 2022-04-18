@@ -9,16 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectDB = void 0;
-const mongoose_1 = require("mongoose");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield (0, mongoose_1.connect)(process.env.MONGODB_URL);
-        console.log('Connect Database successfully !!!');
-    }
-    catch (error) {
-        console.log(error);
-        console.log('Connect Database failuren  !!!');
-    }
+exports.getEventBySlug = void 0;
+const index_1 = require("..//app/model/index");
+const getEventBySlug = (slug) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield index_1.Event.findOne({ slug: slug });
 });
-exports.connectDB = connectDB;
+exports.getEventBySlug = getEventBySlug;
