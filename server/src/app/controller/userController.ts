@@ -4,7 +4,7 @@ import 'dotenv/config'
 
 import { sendError, sendResult } from '../../util/res.util'
 import { getEventBySlug } from '../../util/event.util'
-import { insertUserOnEvent, getListUserByEventAndOption, deleteUserById, getUserByEmailPopulated, getUserByEmail } from '..//..//util/user.util'
+import { insertUserOnEvent, getListUserByEventAndOption, deleteUserById, getUserByEmailPopulated, getUserByEmail, updateUserUtil } from '..//..//util/user.util'
 import { Account, IEvent, IUser, User } from '../model'
 import { eventAValidation, eventBValidation, emailValidation, updateUserValidation } from '..//..//util/valiadtion'
 import { getOptionInRequest } from '..//..//util/pagination.util'
@@ -80,18 +80,41 @@ export const getListEventRegisterByEmail = async (req: Request, res: Response) =
     if (error) {
         return sendError(400, error?.details[0], res);
     }
-    var user = await getUserByEmailPopulated(value.email)
-    console.log(user)
-    res.json(user)
+    getUserByEmailPopulated(value.email).then((user) => {
+
+        if (user) {
+            return sendResult({ user: user }, res);
+        }
+        throw ('Email not Exist');
+    }).catch((e) => {
+        return sendError(400, { message: 'Email not Exist' }, res);
+    })
+
+
+
 }
 
 // [PUT]/account/update-user
 export const updateUser = async (req: Request, res: Response) => {
-    var { error, value } = updateUserValidation.validate(req.query);
+
+    var { error, value } = updateUserValidation.validate(req.body);
     if (error) {
         return sendError(400, error?.details[0], res);
     }
+
     var userOld = await getUserByEmail(value.email);
+    if (userOld && userOld._id != value._id) {
+        return sendError(400, { message: 'Email already Exist ' }, res)
+    }
+
+    updateUserUtil(value).then((e: any) => {
+        var count = e.modifiedCount
+        return sendResult({ modifiedCount: count }, res);
+    }).catch((error: any) => {
+        console.log(error)
+        return sendError(400, error, res);
+    })
+
 
 }
 

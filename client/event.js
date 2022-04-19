@@ -1,3 +1,4 @@
+var url = "https://13.213.68.138:3000";
 var lastName = document.getElementById("lastName");
 var firstName = document.getElementById("firstName");
 var email = document.getElementById("email");
@@ -19,7 +20,7 @@ var errorSub = document.querySelector("#error p");
       workLocation: workLocation.value,
     };
     e.preventDefault();
-    fetchRegisterEvent("http://localhost:3000/register-event/event-a", data);
+    fetchRegisterEvent(`${url}/register-event/event-a`, data);
   });
 })();
 
@@ -34,7 +35,7 @@ var errorSub = document.querySelector("#error p");
       hobbies: hobbies.value,
     };
     e.preventDefault();
-    fetchRegisterEvent("http://localhost:3000/register-event/event-b", data);
+    fetchRegisterEvent(`${url}/register-event/event-b`, data);
   });
 })();
 

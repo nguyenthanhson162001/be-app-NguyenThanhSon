@@ -36,3 +36,8 @@ export const deleteUserById = async (id: string) => {
 export const getListUserByEventAndOption = async (options: any) => {
     return await User.paginate(options);
 }
+export const updateUserUtil = async (user: any) => {
+    var _id = user._id;
+    delete user._id
+    return await User.updateOne({ _id }, user);
+}

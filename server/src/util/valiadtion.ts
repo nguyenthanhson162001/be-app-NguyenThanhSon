@@ -41,11 +41,10 @@ export const emailValidation = Joi.object({
 export const updateUserValidation = Joi.object({
     ...eventvalidationBasic,
     hobbies: Joi.string()
-        .max(200),
+        .max(200).allow(''),
 
     workLocation: Joi.string()
-        .max(30),
-
+        .max(200).allow(''),
     _id: Joi.string()
         .required(),
 })

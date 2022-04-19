@@ -10,10 +10,10 @@ export default (app: any) => {
 
     app.delete('/user/delete', deleteUser);
 
-    app.get('/account/get-token', getToken)
+    app.post('/account/get-token', getToken)
 
     app.get('/account/get-list-event-register', checkToken, getListEventRegisterByEmail)
 
-    app.put('/account/update-user', checkToken, updateUser)
+    app.put('/account/update-user-registed-event', checkToken, updateUser)
 
 }
