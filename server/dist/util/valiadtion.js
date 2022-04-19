@@ -37,6 +37,6 @@ exports.emailValidation = joi_1.default.object({
         .required(),
 });
 exports.updateUserValidation = joi_1.default.object(Object.assign(Object.assign({}, eventvalidationBasic), { hobbies: joi_1.default.string()
-        .max(200), workLocation: joi_1.default.string()
-        .max(30), _id: joi_1.default.string()
+        .max(200).allow(''), workLocation: joi_1.default.string()
+        .max(200).allow(''), _id: joi_1.default.string()
         .required() }));

@@ -9,7 +9,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const checkToken = (req, res, next) => {
     const token = req.headers["auth-token"];
     if (!token)
-        return (0, res_util_1.sendError)(400, 'missing auth-token in header', res);
+        return (0, res_util_1.sendError)(400, { message: 'missing auth-token in header' }, res);
     try {
         const verified = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.userID = verified._id;
@@ -17,7 +17,7 @@ const checkToken = (req, res, next) => {
         next();
     }
     catch (error) {
-        return (0, res_util_1.sendError)(400, 'Invalid token', res);
+        return (0, res_util_1.sendError)(400, { message: 'Invalid token' }, res);
     }
 };
 exports.checkToken = checkToken;

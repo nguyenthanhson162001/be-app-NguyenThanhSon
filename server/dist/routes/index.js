@@ -7,7 +7,7 @@ exports.default = (app) => {
     app.post('/register-event/:slug', userController_1.registerEvent);
     app.get('/user/list-user', userController_1.listUserByEvent);
     app.delete('/user/delete', userController_1.deleteUser);
-    app.get('/account/get-token', accountController_1.getToken);
+    app.post('/account/get-token', accountController_1.getToken);
     app.get('/account/get-list-event-register', verifyToken_1.checkToken, userController_1.getListEventRegisterByEmail);
-    app.put('/account/update-user', verifyToken_1.checkToken, userController_1.updateUser);
+    app.put('/account/update-user-registed-event', verifyToken_1.checkToken, userController_1.updateUser);
 };

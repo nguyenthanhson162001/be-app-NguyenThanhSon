@@ -82,17 +82,32 @@ const getListEventRegisterByEmail = (req, res) => __awaiter(void 0, void 0, void
     if (error) {
         return (0, res_util_1.sendError)(400, error === null || error === void 0 ? void 0 : error.details[0], res);
     }
-    var user = yield (0, user_util_1.getUserByEmailPopulated)(value.email);
-    console.log(user);
-    res.json(user);
+    (0, user_util_1.getUserByEmailPopulated)(value.email).then((user) => {
+        if (user) {
+            return (0, res_util_1.sendResult)({ user: user }, res);
+        }
+        throw ('Email not Exist');
+    }).catch((e) => {
+        return (0, res_util_1.sendError)(400, { message: 'Email not Exist' }, res);
+    });
 });
 exports.getListEventRegisterByEmail = getListEventRegisterByEmail;
 // [PUT]/account/update-user
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var { error, value } = valiadtion_1.updateUserValidation.validate(req.query);
+    var { error, value } = valiadtion_1.updateUserValidation.validate(req.body);
     if (error) {
         return (0, res_util_1.sendError)(400, error === null || error === void 0 ? void 0 : error.details[0], res);
     }
     var userOld = yield (0, user_util_1.getUserByEmail)(value.email);
+    if (userOld && userOld._id != value._id) {
+        return (0, res_util_1.sendError)(400, { message: 'Email already Exist ' }, res);
+    }
+    (0, user_util_1.updateUserUtil)(value).then((e) => {
+        var count = e.modifiedCount;
+        return (0, res_util_1.sendResult)({ modifiedCount: count }, res);
+    }).catch((error) => {
+        console.log(error);
+        return (0, res_util_1.sendError)(400, error, res);
+    });
 });
 exports.updateUser = updateUser;

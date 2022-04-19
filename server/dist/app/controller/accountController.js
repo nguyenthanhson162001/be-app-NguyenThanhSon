@@ -19,15 +19,16 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const account_util_1 = require("../../util/account.util");
 // [DELETE]/account/delete?userId=
 const getToken = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var { error, value } = yield valiadtion_1.loginValidation.validate(req.query);
+    var { error, value } = yield valiadtion_1.loginValidation.validate(req.body);
     if (error) {
         return (0, res_util_1.sendError)(400, error === null || error === void 0 ? void 0 : error.details[0], res);
     }
+    console.log(value);
     var account = yield (0, account_util_1.getAccountByEmailPassword)(value.email, value.password);
     if (!account)
-        return (0, res_util_1.sendError)(400, 'Email or password not correct', res);
+        return (0, res_util_1.sendError)(400, { message: 'Email or password not correct' }, res);
     const token = jsonwebtoken_1.default.sign({ _id: account._id, role: account.role }, process.env.JWT_SECRET, {
-        expiresIn: "4h",
+        expiresIn: "48h",
     });
     (0, res_util_1.sendResult)({ token }, res);
 });

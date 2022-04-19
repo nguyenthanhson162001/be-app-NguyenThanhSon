@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getListUserByEventAndOption = exports.deleteUserById = exports.isUserContain = exports.getUserByEmailPopulated = exports.getUserByEmail = exports.insertUserOnEvent = void 0;
+exports.updateUserUtil = exports.getListUserByEventAndOption = exports.deleteUserById = exports.isUserContain = exports.getUserByEmailPopulated = exports.getUserByEmail = exports.insertUserOnEvent = void 0;
 const model_1 = require("..//app/model");
 const insertUserOnEvent = (user, eventId) => __awaiter(void 0, void 0, void 0, function* () {
     var userCheck = yield (0, exports.getUserByEmail)(user.email);
@@ -53,3 +53,9 @@ const getListUserByEventAndOption = (options) => __awaiter(void 0, void 0, void 
     return yield model_1.User.paginate(options);
 });
 exports.getListUserByEventAndOption = getListUserByEventAndOption;
+const updateUserUtil = (user) => __awaiter(void 0, void 0, void 0, function* () {
+    var _id = user._id;
+    delete user._id;
+    return yield model_1.User.updateOne({ _id }, user);
+});
+exports.updateUserUtil = updateUserUtil;
