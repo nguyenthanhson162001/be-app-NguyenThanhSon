@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const express_rate_limit_1 = require("express-rate-limit");
+const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const mongoDB_1 = require("./config/database/mongoDB");
@@ -18,6 +20,16 @@ const options = {
     key: fs_1.default.readFileSync('ssl/key.pem'),
     cert: fs_1.default.readFileSync('ssl/cert.pem')
 };
+// security DOS, DDOS
+const limiter = (0, express_rate_limit_1.rateLimit)({
+    // 15 minutes
+    windowMs: 15 * 60 * 1000,
+    // limit each IP to 100 requests per windowMs
+    max: 100
+});
+app.use(limiter);
+// security filter request toxic
+app.use((0, helmet_1.default)());
 app.use(express_1.default.json()); // for parsing application/json
 app.use(express_1.default.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use((0, cors_1.default)());
